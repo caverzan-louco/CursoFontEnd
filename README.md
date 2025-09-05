@@ -12,8 +12,9 @@ graph TD
     subgraph Back["API"]
         BackEnd
     end
-    subgraph Cliente["MongoDB"]
+    subgraph Banco["MongoDB"]
         BD
+
     end
 
     %% fluxo
