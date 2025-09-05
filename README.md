@@ -9,7 +9,7 @@ graph TD
     subgraph Front["React"]
         FrontEnd
     end
-    subgraph Cliente["API"]
+    subgraph Back["API"]
         BackEnd
     end
     subgraph Cliente["MongoDB"]
