@@ -1,30 +1,29 @@
-//componente para criar formulário para inserir uma nova
+//componente para criar formulário para inserir uma nova tarefa
 //função para adicionar tarefa (arrow function)
-import "./Form.css";
+import "./Form.css"; //importa a estilização
 
-import { useState } from "react";
+import { useState } from "react"
 
 const Form = ({addTarefa}) => {
     
-    //vetor para armazenar o valor do imput -> useState
-    const [terefa,setTarefa] = useState("");
-    //useState => usa memoria local do navegador
+    //vetor para armazenar o valor do input -> useState
+    const [tarefa, setTarefa] = useState("");
+    //useState => usa a memoria local do navegador
     //para armazenar as mudanças de estado
-    //primeiro elemento do [] armazenas as tarefas,
-    //segundo elemento armazena as mudanças de estado
+    //primeiro elemento do [] aramazenas as tarefas,
+    // segundo elemento armazena as mudanças de estado
 
-    //função para atualizar o estado com o valor do imput
+    //função para atualizar o esstado com o valor do input
     //função vai criar uma nova tarefa ao ser clicado o botão do submit(enviar)
-    const handleSubmit = (e) =>{ //arrowFunction
+    const handleSubmit = (e) =>{ //arrowFucntion
         //impedir o funcionamento padrão do botão submit
-        e.prenventDefault(); //não permite o recarregamento da página
-        //verificar se o campo não está vazio
-        if(terefa.trim() !== ""){
-            //adicionar as tarefas ao vetor de tarefas
-            addTarefa(terefa);
-            //limpo o campo imput
+        e.preventDefault();//não permite o recarregamento da página
+        // verificar se o campo não está vazio
+        if(tarefa.trim() !== ""){
+            //adicionar a tarefa ao vetor de tarefas
+            addTarefa(tarefa);
+            //limpo o campo do input
             setTarefa("");
-
         }
     };
     //lógica por tras do design
@@ -34,15 +33,17 @@ const Form = ({addTarefa}) => {
             <input
                 type="text"
                 placeholder="Inserir Nova Tarefa"
+                value={tarefa}
                 onChange={(e) => setTarefa(e.target.value)}
             />
-            <button className="btnEnviar" type="submi">
+            <button className="btnEnviar" type="submit">
                 Adicionar
             </button>
         </form>
-    )
-}
+    );
+};
 
 export default Form;
 //componente cria o formulário das tarefas
 //pode ser reutilizado em outros componentes da aplicação (export)
+
