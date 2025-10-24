@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Management - Inventory System</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .movement-form { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        form { display: flex; flex-direction: column; max-width: 400px; }
+        select, input { margin-bottom: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; }
+        .alert { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Stock Management</h2>
+        <button onclick="window.location.href='/'">Back to Main</button>
+    </div>
+
+    <div class="movement-form">
+        <h3>Add Stock Movement</h3>
+        <form id="movementForm">
+            <select id="productId" required>
+                <option value="">Select Product</option>
+                {{#each products}}
+                <option value="{{this._id}}">{{this.name}} (Current: {{this.currentStock}})</option>
+                {{/each}}
+            </select>
+            <select id="type" required>
+                <option value="">Select Type</option>
+                <option value="entry">Entry</option>
+                <option value="exit">Exit</option>
+            </select>
+            <input type="number" id="quantity" placeholder="Quantity" required min="1">
+            <input type="date" id="date" required>
+            <input type="text" id="responsible" placeholder="Responsible" required>
+            <button type="submit">Add Movement</button>
+        </form>
+        <div id="alertMessage" class="alert" style="display: none;"></div>
+    </div>
+
+    <h3>Products (Alphabetical Order)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Current Stock</th>
+                <th>Min Stock</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.currentStock}}</td>
+                <td>{{this.minStock}}</td>
+                <td {{#if (lt this.currentStock this.minStock)}}class="alert"{{/if}}>
+                    {{#if (lt this.currentStock this.minStock)}}Low Stock{{else}}OK{{/if}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <h3>Recent Movements</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Date</th>
+                <th>Responsible</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each movements}}
+            <tr>
+                <td>{{this.productId}}</td>
+                <td>{{this.type}}</td>
+                <td>{{this.quantity}}</td>
+                <td>{{this.date}}</td>
+                <td>{{this.responsible}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <script>
+        document.getElementById('movementForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const movement = {
+                productId: document.getElementById('productId').value,
+                type: document.getElementById('type').value,
+                quantity: parseInt(document.getElementById('quantity').value),
+                date: document.getElementById('date').value,
+                responsible: document.getElementById('responsible').value,
+            };
+
+            fetch('/stock/movement', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(movement)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.alert) {
+                    document.getElementById('alertMessage').textContent = data.alert;
+                    document.getElementById('alertMessage').style.display = 'block';
+                } else {
+                    document.getElementById('alertMessage').style.display = 'none';
+                }
+                location.reload();
+            });
+        });
+    </script>
+</body>
+</html>

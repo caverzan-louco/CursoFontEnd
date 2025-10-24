@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main - Inventory System</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .menu { display: flex; gap: 10px; }
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .logout { background-color: #dc3545; }
+        .logout:hover { background-color: #c82333; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Welcome, {{user.name}}!</h2>
+        <div class="menu">
+            <button onclick="window.location.href='/products'">Product Management</button>
+            <button onclick="window.location.href='/stock'">Stock Management</button>
+            <button class="logout" onclick="window.location.href='/auth/login'">Logout</button>
+        </div>
+    </div>
+    <h3>Dashboard</h3>
+    <p>Select an option from the menu above.</p>
+</body>
+</html>
